@@ -12,7 +12,7 @@ rm -rf target
 mkdir -p target/native-image
 
 echo "Packaging $ARTIFACT with Maven"
-mvn -ntp package > target/native-image/output.txt
+mvn -ntp package -Pclient > target/native-image/output.txt
 
 JAR="$ARTIFACT-$VERSION.war"
 rm -f $ARTIFACT
@@ -30,6 +30,7 @@ echo "Compiling $ARTIFACT with $GRAALVM_VERSION"
   -H:Name=$ARTIFACT \
   -Dspring.spel.ignore=true \
   -Dspring.native.remove-yaml-support=true \
+   --initialize-at-build-time=org.apache.cxf.common.logging.Slf4jLogger \
   -cp $CP $MAINCLASS
 
 if [[ -f $ARTIFACT ]]
